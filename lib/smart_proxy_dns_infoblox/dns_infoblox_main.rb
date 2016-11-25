@@ -5,6 +5,7 @@ module Proxy::Dns::Infoblox
     def initialize(host, connection, ttl)
       ENV['WAPI_VERSION']='2.0'
       @connection = connection
+      @view = view
       super(host, ttl)
     end
 
@@ -15,7 +16,7 @@ module Proxy::Dns::Infoblox
       when 0 then
         return nil
       else
-        do_create(Infoblox::Arecord, :connection => connection, :name => fqdn, :ipv4addr => ip)
+        do_create(Infoblox::Arecord, :connection => connection, :name => fqdn, :ipv4addr => ip, :view => @view)
       end
     end
 
@@ -26,7 +27,7 @@ module Proxy::Dns::Infoblox
       when 0 then
         return nil
       else
-        do_create(Infoblox::Ptr, :connection => connection, :ptrdname => fqdn, :ipv4addr => ptr_to_ip(ptr))
+        do_create(Infoblox::Ptr, :connection => connection, :ptrdname => fqdn, :ipv4addr => ptr_to_ip(ptr), :view => @view)
       end
       # FIXME: add a reverse 'PTR' record with ip, fqdn
     end
