@@ -33,11 +33,11 @@ module Proxy::Dns::Infoblox
     end
 
     def remove_a_record(fqdn)
-      do_delete(Infoblox::Arecord.find(connection, :name => fqdn, :_max_results => 1).first, fqdn)
+      do_delete(Infoblox::Arecord.find(connection, :name => fqdn, :_max_results => 1, :view => @view).first, fqdn)
     end
 
     def remove_ptr_record(ptr)
-      ptr_record = Infoblox::Ptr.find(connection, :ipv4addr => ptr_to_ip(ptr), :_max_results => 1).first
+      ptr_record = Infoblox::Ptr.find(connection, :ipv4addr => ptr_to_ip(ptr), :_max_results => 1, :view => @view).first
       unless ptr_record.nil?
         ptr_record.ipv6addr = nil
         ptr_record.view = nil
